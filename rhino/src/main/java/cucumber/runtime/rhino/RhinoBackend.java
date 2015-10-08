@@ -98,22 +98,24 @@ public class RhinoBackend implements Backend {
         Throwable t = new Throwable();
         StackTraceElement[] stackTraceElements = t.getStackTrace();
         for (StackTraceElement stackTraceElement : stackTraceElements) {
-            boolean js = stackTraceElement.getFileName().endsWith(".js");
-            if (js) {
-                boolean isDsl = stackTraceElement.getFileName().endsWith(JS_DSL);
-                boolean hasLine = stackTraceElement.getLineNumber() != -1;
-                if (!isDsl && hasLine) {
-                    return stackTraceElement;
-                }
-//                System.out.println("stackTraceElement.getFileName() = " + stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber());
-//                for (String gluePath : gluePaths) {
-//                    boolean inScriptPath = packageName(stackTraceElement.getFileName()).startsWith(packageName(gluePath));
-//                    boolean hasLine = stackTraceElement.getLineNumber() != -1;
-//                    if (inScriptPath && hasLine) {
-//                        return stackTraceElement;
-//                    }
-//                }
-            }
+			if (stackTraceElement.getFileName() != null) {
+				boolean js = stackTraceElement.getFileName().endsWith(".js");
+				if (js) {
+					boolean isDsl = stackTraceElement.getFileName().endsWith(JS_DSL);
+					boolean hasLine = stackTraceElement.getLineNumber() != -1;
+					if (!isDsl && hasLine) {
+						return stackTraceElement;
+					}
+	//                System.out.println("stackTraceElement.getFileName() = " + stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber());
+	//                for (String gluePath : gluePaths) {
+	//                    boolean inScriptPath = packageName(stackTraceElement.getFileName()).startsWith(packageName(gluePath));
+	//                    boolean hasLine = stackTraceElement.getLineNumber() != -1;
+	//                    if (inScriptPath && hasLine) {
+	//                        return stackTraceElement;
+	//                    }
+	//                }
+				}
+			}
         }
         throw new RuntimeException("Couldn't find location for step definition");
     }
